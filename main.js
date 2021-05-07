@@ -36,7 +36,7 @@ client.on("message", async message => {
   } else if (message.content.startsWith(`${prefix}loop`)) {
     execute(message, serverQueue, true);
     return;
-  } else if (message.connection.startsWith(`${prefix}volume`)) {
+  } else if (message.content.startsWith(`${prefix}volume`)) {
     setVolume(message, serverQueue);
     return;
   } else {
