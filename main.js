@@ -36,6 +36,9 @@ client.on("message", async message => {
   } else if (message.content.startsWith(`${prefix}loop`)) {
     execute(message, serverQueue, true);
     return;
+  } else if (message.connection.startsWith(`${prefix}volume`)) {
+    setVolume(message, serverQueue);
+    return;
   } else {
     message.channel.send("You need to enter a valid command!");
   }
@@ -137,6 +140,21 @@ function play(guild, song) {
     .on("error", error => console.error(error));
   dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
   serverQueue.textChannel.send(`Start playing: **${song.title}**`);
+}
+
+function setVolume(message, serverQueue) {
+  const dispatcher = serverQueue.connection;
+  const args = message.content.split(" ");
+
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      "You have to be in a voice channel to stop the music!"
+    );
+  if (!serverQueue) {
+    return message.channel.send("The queue is already empty!");
+  }
+
+  dispatcher.setVolumeLogarithmic(args[1]);
 }
 
 client.login(token);
