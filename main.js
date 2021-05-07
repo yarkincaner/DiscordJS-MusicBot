@@ -36,7 +36,7 @@ client.on("message", async message => {
   } else if (message.content.startsWith(`${prefix}loop`)) {
     execute(message, serverQueue, true);
     return;
-  } else if (message.connection.startsWith(`${prefix}volume`)) {
+  } else if (message.content.startsWith(`${prefix}volume`)) {
     setVolume(message, serverQueue);
     return;
   } else {
@@ -155,6 +155,7 @@ function setVolume(message, serverQueue) {
   }
 
   dispatcher.setVolumeLogarithmic(args[1]);
+  return message.channel.send(`Volume set to **${args[1]}`);
 }
 
 client.login(token);
