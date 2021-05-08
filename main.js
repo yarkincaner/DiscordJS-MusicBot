@@ -153,7 +153,9 @@ function setVolume(message, serverQueue) {
   if (!serverQueue) {
     return message.channel.send("The queue is already empty!");
   }
-  if(!args)
+  if(!args[1]) {
+    return message.channel.send(`Current Volume: ${serverQueue.volume}`);
+  }
 
   serverQueue.volume = args[1];
 //  serverQueue.dispatcher.volume = parseInt(args[1]);
