@@ -144,6 +144,7 @@ function play(guild, song) {
 
 function setVolume(message, serverQueue) {
   const args = message.content.split(" ");
+  const serverQueue = queue.get(guild.id);
 
   if (!message.member.voice.channel)
     return message.channel.send(
@@ -152,12 +153,13 @@ function setVolume(message, serverQueue) {
   if (!serverQueue) {
     return message.channel.send("The queue is already empty!");
   }
+  if(!args)
 
-//  serverQueue.volume = args[1];
+  serverQueue.volume = args[1];
 //  serverQueue.dispatcher.volume = parseInt(args[1]);
 //  dispatcher.setVolumeLogarithmic(serverQueue.volume);
-  dispatcher.setVolumeLogarithmic(parseInt(args[1]));
-  return message.channel.send(`Volume set to **${args[1]}`);
+//  dispatcher.setVolumeLogarithmic(parseInt(args[1]));
+  message.channel.send(`Volume set to **${args[1]}`);
 }
 
 client.login(token);
