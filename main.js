@@ -143,7 +143,6 @@ function play(guild, song) {
 }
 
 function setVolume(message, serverQueue) {
-  const dispatcher = serverQueue.connection;
   const args = message.content.split(" ");
 
   if (!message.member.voice.channel)
@@ -154,7 +153,10 @@ function setVolume(message, serverQueue) {
     return message.channel.send("The queue is already empty!");
   }
 
-  dispatcher.setVolumeLogarithmic(args[1]);
+//  serverQueue.volume = args[1];
+//  serverQueue.dispatcher.volume = parseInt(args[1]);
+//  dispatcher.setVolumeLogarithmic(serverQueue.volume);
+  dispatcher.setVolumeLogarithmic(serverQueue.volume / parseInt(args[1]));
   return message.channel.send(`Volume set to **${args[1]}`);
 }
 
