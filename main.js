@@ -37,7 +37,13 @@ client.on("message", async message => {
     execute(message, serverQueue, true);
     return;
   } else if (message.content.startsWith(`${prefix}volume`)) {
-    setVolume(message, serverQueue);
+    volume(message, serverQueue);
+    return;
+  } else if (message.content.startsWith(`${prefix}pause`)) {
+    pause(message, serverQueue);
+    return;
+  } else if (message.content.startsWith(`${prefix}resume`)) {
+    resume(message, serverQueue);
     return;
   } else {
     message.channel.send("You need to enter a valid command!");
@@ -63,7 +69,7 @@ async function execute(message, serverQueue, isLoop) {
   const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
-   };
+  };
 
   if (!serverQueue) {
     const queueContruct = {
@@ -101,8 +107,10 @@ function skip(message, serverQueue) {
     return message.channel.send(
       "You have to be in a voice channel to stop the music!"
     );
-  if (!serverQueue)
+  if (!serverQueue) {
     return message.channel.send("The queue is already empty!");
+  }
+    
   serverQueue.connection.dispatcher.end();
 }
 
@@ -142,10 +150,7 @@ function play(guild, song) {
   serverQueue.textChannel.send(`Start playing: **${song.title}**`);
 }
 
-function setVolume(message, serverQueue) {
-  const args = message.content.split(" ");
-  const serverQueue = queue.get(guild.id);
-
+function pause(message, serverQueue) {
   if (!message.member.voice.channel)
     return message.channel.send(
       "You have to be in a voice channel to stop the music!"
@@ -153,15 +158,44 @@ function setVolume(message, serverQueue) {
   if (!serverQueue) {
     return message.channel.send("The queue is already empty!");
   }
-  if(!args[1]) {
-    return message.channel.send(`Current Volume: ${serverQueue.volume}`);
+
+  serverQueue.connection.dispatcher.pause(true);
+  const song = serverQueue.songs[0];
+  message.channel.send(`${song.title} is paused!`);
+}
+
+function resume(message, serverQueue) {
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      "You have to be in a voice channel to stop the music!"
+    );
+  if (!serverQueue) {
+    return message.channel.send("The queue is already empty!");
   }
 
-  serverQueue.volume = args[1];
-//  serverQueue.dispatcher.volume = parseInt(args[1]);
-//  dispatcher.setVolumeLogarithmic(serverQueue.volume);
-//  dispatcher.setVolumeLogarithmic(parseInt(args[1]));
-  message.channel.send(`Volume set to **${args[1]}`);
+  serverQueue.connection.dispatcher.resume();
+  const song = serverQueue.songs[0];
+  message.channel.send(`${song.title} is paused!`);
+}
+
+function volume(message, serverQueue) {
+
+  const args = message.content.split(" ");
+  args[1] = parseFloat(args[1]);
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      "You have to be in a voice channel to stop the music!"
+    );
+  if (!serverQueue) {
+    return message.channel.send("The queue is already empty!");
+  }
+  
+  if(!args[1]) {
+    return message.channel.send(`Current Volume: ${serverQueue.connection.dispatcher.volume}`);
+  }
+  
+  serverQueue.connection.dispatcher.setVolume(args[1]);
+  message.channel.send(`Volume set to **${args[1]}**`);
 }
 
 client.login(token);
