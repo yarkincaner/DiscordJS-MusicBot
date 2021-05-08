@@ -156,7 +156,7 @@ function setVolume(message, serverQueue) {
 //  serverQueue.volume = args[1];
 //  serverQueue.dispatcher.volume = parseInt(args[1]);
 //  dispatcher.setVolumeLogarithmic(serverQueue.volume);
-  dispatcher.setVolumeLogarithmic(serverQueue.volume / parseInt(args[1]));
+  dispatcher.setVolumeLogarithmic(parseInt(args[1]));
   return message.channel.send(`Volume set to **${args[1]}`);
 }
 
