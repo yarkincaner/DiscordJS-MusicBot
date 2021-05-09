@@ -93,7 +93,18 @@ async function execute(message, serverQueue, isLoop) {
       queueContruct.connection = connection;
       
       play(message.guild, queueContruct.songs[0]);
-      
+
+//      const hours = parseInt(song.duration / 3600);
+//      if(hours < 10) {
+//        hours = "0" + hours;
+//      }
+//
+//      const minutes = parseInt(song.duration / 60);
+//      if(minutes < 10) {
+//        minutes = "0" + minutes;
+//      }
+//
+//      const seconds = (song.duration % 60);
       const embed = new Discord.MessageEmbed()
         .setColor('#9399ff')
         .setTitle('Hands in the air!')
@@ -103,7 +114,7 @@ async function execute(message, serverQueue, isLoop) {
           //{ name: '\u200B', value: '\u200B'}, //Empty line
           { name: 'Song Title', value: `${song.title}`},
           { name: 'Volume', value: `${queueContruct.connection.dispatcher.volume}`, inline: true},
-          { name: 'Duration', value: `${song.duration} seconds`, inline: true}
+          { name: 'Duration', value: `${new Date(song.duration * 1000).toISOString().substr(11, 8)}`, inline: true}
         )
         .setImage(`${song.channelPicture}`)
         .setTimestamp()
