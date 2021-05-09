@@ -69,6 +69,8 @@ async function execute(message, serverQueue, isLoop) {
   const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
+        duration: songInfo.videoDetails.lengthSeconds,
+        channelPicture: songInfo.videoDetails.thumbnails[1].url
   };
 
   if (!serverQueue) {
@@ -91,6 +93,24 @@ async function execute(message, serverQueue, isLoop) {
       queueContruct.connection = connection;
       
       play(message.guild, queueContruct.songs[0]);
+      
+      const embed = new Discord.MessageEmbed()
+        .setColor('#9399ff')
+        .setTitle('Hands in the air!')
+        .setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL(true)}`)
+        .setThumbnail(`${song.channelPicture}`)
+        .addFields(
+          //{ name: '\u200B', value: '\u200B'}, //Empty line
+          { name: 'Song Title', value: `${song.title}`},
+          { name: 'Volume', value: `${queueContruct.connection.dispatcher.volume}`, inline: true},
+          { name: 'Duration', value: `${song.duration} seconds`, inline: true}
+        )
+        .setImage(`${song.channelPicture}`)
+        .setTimestamp()
+        .setFooter(`${queueContruct.songs.length} songs left`);
+      
+      message.channel.send(embed);
+
     } catch (err) {
       console.log(err);
       queue.delete(message.guild.id);
@@ -100,6 +120,31 @@ async function execute(message, serverQueue, isLoop) {
     serverQueue.songs.push(song);
     return message.channel.send(`${song.title} has been added to the queue!`);
   }
+}
+
+function play(guild, song) {
+  const serverQueue = queue.get(guild.id);
+  if (!song) {
+    serverQueue.voiceChannel.leave();
+    queue.delete(guild.id);
+    return;
+  }
+
+  const dispatcher = serverQueue.connection
+    .play(ytdl(song.url))
+    .on("finish", () => {
+      if(serverQueue.loop) {
+        serverQueue.songs.push(serverQueue.songs.shift());
+      } else {
+        serverQueue.songs.shift();
+      }
+      play(guild, serverQueue.songs[0]);
+    })
+    .on("error", error => console.error(error));
+  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+  serverQueue.textChannel.send(`Start playing: **${song.title}**`);
+
+  
 }
 
 function skip(message, serverQueue) {
@@ -125,29 +170,6 @@ function stop(message, serverQueue) {
     
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
-}
-
-function play(guild, song) {
-  const serverQueue = queue.get(guild.id);
-  if (!song) {
-    serverQueue.voiceChannel.leave();
-    queue.delete(guild.id);
-    return;
-  }
-
-  const dispatcher = serverQueue.connection
-    .play(ytdl(song.url))
-    .on("finish", () => {
-      if(serverQueue.loop) {
-        serverQueue.songs.push(serverQueue.songs.shift());
-      } else {
-        serverQueue.songs.shift();
-      }
-      play(guild, serverQueue.songs[0]);
-    })
-    .on("error", error => console.error(error));
-  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-  serverQueue.textChannel.send(`Start playing: **${song.title}**`);
 }
 
 function pause(message, serverQueue) {
