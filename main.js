@@ -94,17 +94,6 @@ async function execute(message, serverQueue, isLoop) {
       
       play(message.guild, queueContruct.songs[0]);
 
-//      const hours = parseInt(song.duration / 3600);
-//      if(hours < 10) {
-//        hours = "0" + hours;
-//      }
-//
-//      const minutes = parseInt(song.duration / 60);
-//      if(minutes < 10) {
-//        minutes = "0" + minutes;
-//      }
-//
-//      const seconds = (song.duration % 60);
       const embed = new Discord.MessageEmbed()
         .setColor('#9399ff')
         .setTitle('Hands in the air!')
@@ -152,10 +141,9 @@ function play(guild, song) {
       play(guild, serverQueue.songs[0]);
     })
     .on("error", error => console.error(error));
+  
   dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
   serverQueue.textChannel.send(`Start playing: **${song.title}**`);
-
-  
 }
 
 function skip(message, serverQueue) {
