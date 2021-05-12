@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const { prefix, token } = require("./config.json");
 const ytdl = require("ytdl-core");
+const child_process = require('child_process');
 
 const client = new Discord.Client();
 
@@ -44,6 +45,9 @@ client.on("message", async message => {
     return;
   } else if (message.content.startsWith(`${prefix}resume`)) {
     resume(message, serverQueue);
+    return;
+  } else if (message.content.startsWith(`${prefix}restart`)) {
+    restart(message, serverQueue);
     return;
   } else {
     message.channel.send("You need to enter a valid command!");
@@ -218,5 +222,22 @@ function volume(message, serverQueue) {
   serverQueue.connection.dispatcher.setVolume(args[1]);
   message.channel.send(`Volume set to **${args[1]}**`);
 }
+
+async function restart(message, serverQueue) {
+
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      "You have to be in a voice channel to stop the music!"
+    );
+    
+  if (!serverQueue)
+    return message.channel.send("The queue is already empty!");
+  
+  await message.channel.send("Hoççağalın ğidiyom ben Ğ!");
+  serverQueue.connection.dispatcher.end();
+  process.exit();
+}
+
+
 
 client.login(token);
