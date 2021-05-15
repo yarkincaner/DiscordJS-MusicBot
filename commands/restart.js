@@ -3,7 +3,7 @@ module.exports = {
     description: "Restarts the bot",
     async execute(message, serverQueue, client, token) {
 
-        if(message.author.id != '466989953063190529') {
+        if(!message.member.hasPermission("ADMINISTRATOR")) {
             return message.channel.send("You cannot use this command");
         }
 
