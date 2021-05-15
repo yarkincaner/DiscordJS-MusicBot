@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
 const { prefix, token } = require("./config.json");
 const ytdl = require("ytdl-core");
-const child_process = require('child_process');
 
 const client = new Discord.Client();
 
@@ -10,6 +9,7 @@ const queue = new Map();
 const fs = require('fs');
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
+
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
   client.commands.set(command.name, command);
@@ -57,7 +57,6 @@ client.on("message", async message => {
     client.commands.get('resume').execute(message, serverQueue);
     return;
   } else if (command === 'restart') {
-    //restart(message, serverQueue);
     client.commands.get('restart').execute(message, serverQueue, client, token);
     return;
   } else {
@@ -110,7 +109,6 @@ async function execute(message, serverQueue, isLoop) {
       var connection = await voiceChannel.join();
       queueContruct.connection = connection;
       
-      //play(message.guild, queueContruct.songs[0]);
       client.commands.get('play').execute(message.guild, queueContruct.songs[0], ytdl, queue);
 
       const embed = new Discord.MessageEmbed()
@@ -140,22 +138,5 @@ async function execute(message, serverQueue, isLoop) {
     return message.channel.send(`${song.title} has been added to the queue!`);
   }
 }
-
-//async function restart(message, serverQueue) {
-//
-//  if (!message.member.voice.channel){
-//    return message.channel.send(
-//      "You have to be in a voice channel to stop the music!"
-//    );
-//  }
-//
-//  message.channel.send("Hoççağalın ğidiyom ben Ğ!");
-//  
-//  if(serverQueue) {
-//    serverQueue.connection.dispatcher.end();
-//  }
-//
-//  process.exit();
-//}
 
 client.login(token);

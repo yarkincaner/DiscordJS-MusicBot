@@ -7,13 +7,16 @@ module.exports = {
             return message.channel.send("You cannot use this command");
         }
 
-        await message.channel.send("Restarted!")
+        await message.channel.send("Restarting...")
             .then(() => {
                 if(serverQueue) {
                     serverQueue.connection.dispatcher.end();
                 }
                 client.destroy();
             })
-            .then(() => client.login(token));
+            .then(() => {
+                client.login(token);
+                message.channel.send("Restarted!");
+            });
     }
 }
