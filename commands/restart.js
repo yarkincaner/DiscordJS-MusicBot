@@ -3,8 +3,8 @@ module.exports = {
     description: "Restarts the bot",
     async execute(message, serverQueue, client, token) {
 
-        if(!message.member.hasPermission("ADMINISTRATOR")) {
-            return message.channel.send("You cannot use this command");
+        if(!message.member.permissions.has("ADMINISTRATOR")) {
+            return message.channel.send("You cannot use this command!");
         }
 
         await message.channel.send("Restarting...")

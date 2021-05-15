@@ -108,7 +108,7 @@ async function execute(message, serverQueue, isLoop) {
     try {
       var connection = await voiceChannel.join();
       queueContruct.connection = connection;
-      
+
       client.commands.get('play').execute(message.guild, queueContruct.songs[0], ytdl, queue);
 
       const embed = new Discord.MessageEmbed()
@@ -125,7 +125,7 @@ async function execute(message, serverQueue, isLoop) {
         .setImage(`${song.channelPicture}`)
         .setTimestamp()
         .setFooter(`${queueContruct.songs.length} songs left`);
-      
+
       message.channel.send(embed);
 
     } catch (err) {
