@@ -1,9 +1,7 @@
-const Discord = require('discord.js');
-
 module.exports = {
     name: 'play',
     description: "plays the passed youtube link",
-    execute(author, guild, song, ytdl, queue) {
+    execute(author, guild, song, ytdl, queue, Discord) {
         const serverQueue = queue.get(guild.id);
         if (!song) {
             serverQueue.voiceChannel.leave();
@@ -19,7 +17,7 @@ module.exports = {
                     serverQueue.songs.shift();
                 }
 
-                this.execute(author, guild, serverQueue.songs[0], ytdl, queue);
+                this.execute(author, guild, serverQueue.songs[0], ytdl, queue, Discord);
             })
             .on("error", error => console.error(error));
 
@@ -40,6 +38,5 @@ module.exports = {
                 .setTimestamp(`${song.date}`)
                 .setFooter(`${serverQueue.songs.length} songs left`);
             serverQueue.textChannel.send(embed);
-            serverQueue.textChannel.send(`Start playing: **${song.title}**`);
     }
 }

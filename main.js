@@ -15,8 +15,13 @@ for (const file of commandFiles) {
   client.commands.set(command.name, command);
 }
 
-client.once("ready", () => {
+client.on("ready", () => {
   console.log("Ready!");
+  client.user.setPresence({
+    activity: {
+      name: `"${prefix}help" for help`
+    }
+  })
 });
 
 client.once("reconnecting", () => {
@@ -59,8 +64,11 @@ client.on("message", async message => {
   } else if (command === 'restart') {
     client.commands.get('restart').execute(message, serverQueue, client, token);
     return;
+  } else if (command === 'help') {
+    client.commands.get('help').execute(message, prefix, client.commands, Discord);
+    return;
   } else {
-    message.channel.send("You need to enter a valid command!");
+    message.channel.send(`You need to enter a valid command! Use ${prefix}help if you need any help.`);
   }
 });
 
@@ -110,7 +118,7 @@ async function execute(message, serverQueue, isLoop) {
       var connection = await voiceChannel.join();
       queueContruct.connection = connection;
 
-      client.commands.get('play').execute(message.author, message.guild, queueContruct.songs[0], ytdl, queue);
+      client.commands.get('play').execute(message.author, message.guild, queueContruct.songs[0], ytdl, queue, Discord);
 
       // const embed = new Discord.MessageEmbed()
       //   .setColor('#9399ff')
