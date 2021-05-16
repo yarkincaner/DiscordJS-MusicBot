@@ -87,6 +87,7 @@ async function execute(message, serverQueue, isLoop) {
         url: songInfo.videoDetails.video_url,
         duration: songInfo.videoDetails.lengthSeconds,
         channelPicture: songInfo.videoDetails.thumbnails[1].url,
+        date: songInfo.videoDetails.publishDate,
         loop: isLoop,
         isPaused: false
   };
@@ -109,24 +110,24 @@ async function execute(message, serverQueue, isLoop) {
       var connection = await voiceChannel.join();
       queueContruct.connection = connection;
 
-      client.commands.get('play').execute(message.guild, queueContruct.songs[0], ytdl, queue);
+      client.commands.get('play').execute(message.author, message.guild, queueContruct.songs[0], ytdl, queue);
 
-      const embed = new Discord.MessageEmbed()
-        .setColor('#9399ff')
-        .setTitle('Hands in the air!')
-        .setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL(true)}`)
-        .setThumbnail(`${song.channelPicture}`)
-        .addFields(
-          //{ name: '\u200B', value: '\u200B'}, //Empty line
-          { name: 'Song Title', value: `${song.title}`},
-          { name: 'Volume', value: `${queueContruct.connection.dispatcher.volume}`, inline: true},
-          { name: 'Duration', value: `${new Date(song.duration * 1000).toISOString().substr(11, 8)}`, inline: true}
-        )
-        .setImage(`${song.channelPicture}`)
-        .setTimestamp()
-        .setFooter(`${queueContruct.songs.length} songs left`);
+      // const embed = new Discord.MessageEmbed()
+      //   .setColor('#9399ff')
+      //   .setTitle('Hands in the air!')
+      //   .setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL(true)}`)
+      //   .setThumbnail(`${song.channelPicture}`)
+      //   .addFields(
+      //     //{ name: '\u200B', value: '\u200B'}, //Empty line
+      //     { name: 'Song Title', value: `${song.title}`},
+      //     { name: 'Volume', value: `${queueContruct.connection.dispatcher.volume}`, inline: true},
+      //     { name: 'Duration', value: `${new Date(song.duration * 1000).toISOString().substr(11, 8)}`, inline: true}
+      //   )
+      //   .setImage(`${song.channelPicture}`)
+      //   .setTimestamp()
+      //   .setFooter(`${queueContruct.songs.length} songs left`);
 
-      message.channel.send(embed);
+      // message.channel.send(embed);
 
     } catch (err) {
       console.log(err);
