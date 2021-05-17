@@ -6,8 +6,7 @@ module.exports = {
         var embed = new Discord.MessageEmbed()
             .setColor('#9399ff')
             .setTitle('Do you need help?')
-            .setDescription("Commands and descriptions are below")
-            .addField('prefix', `${prefix}`);
+            .setDescription("Commands and descriptions are below" + "\n\n``Prefix: " + prefix + "``");
         
         let keys = Array.from(commands.keys()); //names
         for (const key of keys) {

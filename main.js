@@ -1,3 +1,5 @@
+//TODO: !song command. It should return the embed for the current song in the queue.
+//TODO: Restart komutundaki serverQueue temizlemeyi oradan disconnecte al.
 const Discord = require("discord.js");
 const { prefix, token } = require("./config.json");
 const ytdl = require("ytdl-core");
@@ -15,6 +17,8 @@ for (const file of commandFiles) {
   client.commands.set(command.name, command);
 }
 
+const Embed = require("./embed/embed");
+
 client.on("ready", () => {
   console.log("Ready!");
   client.user.setPresence({
@@ -30,6 +34,45 @@ client.once("reconnecting", () => {
 
 client.once("disconnect", () => {
   console.log("Disconnect!");
+});
+
+client.on("guildCreate", guild => {
+  let channelID;
+  let channels = guild.channels.cache;
+
+  channelLoop:
+  for (let key in channels) {
+      let c = channels[key];
+      if (c[1].type === "text") {
+          channelID = c[0];
+          break channelLoop;
+      }
+  }
+
+  let channel = guild.channels.cache.get(guild.systemChannelID || channelID);
+  let embed = new Embed(Discord, channel);
+  embed.hello();
+});
+
+client.on("guildDelete", async (guild) => {
+  // let channelID;
+  // let channels = guild.channels.cache;
+
+  // channelLoop:
+  // for (let key in channels) {
+  //     let c = channels[key];
+  //     if (c[1].type === "text") {
+  //         channelID = c[0];
+  //         break channelLoop;
+  //     }
+  // }
+  
+  // //let channel = guild.channels.cache.get(guild.systemChannelID || channelID);
+  // const fetchedChannel = await client.channels.fetch(channelID);
+  // let embed = new Embed(Discord, fetchedChannel);
+  // embed.goodbye();
+  queue.clear();
+  console.log("Queue cleared!");
 });
 
 client.on("message", async message => {
@@ -119,23 +162,6 @@ async function execute(message, serverQueue, isLoop) {
       queueContruct.connection = connection;
 
       client.commands.get('play').execute(message.author, message.guild, queueContruct.songs[0], ytdl, queue, Discord);
-
-      // const embed = new Discord.MessageEmbed()
-      //   .setColor('#9399ff')
-      //   .setTitle('Hands in the air!')
-      //   .setAuthor(`${message.author.username}`, `${message.author.displayAvatarURL(true)}`)
-      //   .setThumbnail(`${song.channelPicture}`)
-      //   .addFields(
-      //     //{ name: '\u200B', value: '\u200B'}, //Empty line
-      //     { name: 'Song Title', value: `${song.title}`},
-      //     { name: 'Volume', value: `${queueContruct.connection.dispatcher.volume}`, inline: true},
-      //     { name: 'Duration', value: `${new Date(song.duration * 1000).toISOString().substr(11, 8)}`, inline: true}
-      //   )
-      //   .setImage(`${song.channelPicture}`)
-      //   .setTimestamp()
-      //   .setFooter(`${queueContruct.songs.length} songs left`);
-
-      // message.channel.send(embed);
 
     } catch (err) {
       console.log(err);

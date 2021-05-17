@@ -9,9 +9,9 @@ module.exports = {
 
         await message.channel.send("Restarting...")
             .then(() => {
-                if(serverQueue) {
-                    serverQueue.connection.dispatcher.end();
-                }
+                // if(serverQueue) {
+                //     serverQueue.connection.dispatcher.end();
+                // }
                 client.destroy();
             })
             .then(() => {

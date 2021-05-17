@@ -1,3 +1,5 @@
+const Embed = require("../embed/embed");
+
 module.exports = {
     name: 'play',
     description: "plays the passed youtube link",
@@ -23,20 +25,8 @@ module.exports = {
 
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
-            var embed = new Discord.MessageEmbed()
-                .setColor('#9399ff')
-                .setTitle('Hands in the air!')
-                .setAuthor(`${author.username}`, `${author.displayAvatarURL(true)}`)
-                .setThumbnail(`${song.channelPicture}`)
-                .addFields(
-                    //{ name: '\u200B', value: '\u200B'}, //Empty line
-                    { name: 'Song Title', value: `${song.title}`},
-                    { name: 'Volume', value: `${dispatcher.volume}`, inline: true},
-                    { name: 'Duration', value: `${new Date(song.duration * 1000).toISOString().substr(11, 8)}`, inline: true}
-                )
-                .setImage(`${song.channelPicture}`)
-                .setTimestamp(`${song.date}`)
-                .setFooter(`${serverQueue.songs.length} songs left`);
-            serverQueue.textChannel.send(embed);
+            let embed = new Embed(Discord, serverQueue.textChannel);
+            embed.playEmbed(author, song, dispatcher, serverQueue.songs.length);
+
     }
 }
