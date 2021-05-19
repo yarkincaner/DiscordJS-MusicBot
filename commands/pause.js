@@ -11,6 +11,10 @@ module.exports = {
             return message.channel.send("The queue is already empty!");
         }
 
+        if(serverQueue.songs[0].isPaused) {
+            return message.channel.send("Song is already paused!");
+        }
+
         serverQueue.connection.dispatcher.pause(true);
         serverQueue.songs[0].isPaused = true;
         message.channel.send(`${serverQueue.songs[0].title} is paused`);

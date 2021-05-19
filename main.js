@@ -1,5 +1,3 @@
-//TODO: !song command. It should return the embed for the current song in the queue.
-//TODO: Restart komutundaki serverQueue temizlemeyi oradan disconnecte al.
 const Discord = require("discord.js");
 const { prefix, token } = require("./config.json");
 const ytdl = require("ytdl-core");
@@ -54,7 +52,7 @@ client.on("guildCreate", guild => {
   embed.hello();
 });
 
-client.on("guildDelete", async (guild) => {
+client.on("guildDelete", async guild => {
   // let channelID;
   // let channels = guild.channels.cache;
 
@@ -106,6 +104,9 @@ client.on("message", async message => {
     return;
   } else if (command === 'restart') {
     client.commands.get('restart').execute(message, serverQueue, client, token);
+    return;
+  } else if (command === 'song') {
+    client.commands.get('song').execute(Discord, serverQueue.textChannel, message, serverQueue)
     return;
   } else if (command === 'help') {
     client.commands.get('help').execute(message, prefix, client.commands, Discord);
@@ -172,6 +173,17 @@ async function execute(message, serverQueue, isLoop) {
     serverQueue.songs.push(song);
     return message.channel.send(`${song.title} has been added to the queue!`);
   }
+}
+
+function validURL(input) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+  '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+  '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+  '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+  return !!pattern.test(input);
 }
 
 client.login(token);

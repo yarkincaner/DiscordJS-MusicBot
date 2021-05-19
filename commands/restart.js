@@ -12,6 +12,7 @@ module.exports = {
                 // if(serverQueue) {
                 //     serverQueue.connection.dispatcher.end();
                 // }
+                
                 client.destroy();
             })
             .then(() => {

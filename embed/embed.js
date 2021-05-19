@@ -36,7 +36,9 @@ class Embed {
         const embed = new this.Discord.MessageEmbed()
             .setColor('RANDOM')
             .setTitle('Hey! Are you ready for party?')
-            .setImage('https://media.giphy.com/media/blSTtZehjAZ8I/giphy.gif');
+            .setDescription('')
+            .setImage('https://media1.tenor.com/images/cf40f4758a6c79f0744b13ad867d5974/tenor.gif?itemid=18233486');
+            //.setImage('https://media.giphy.com/media/blSTtZehjAZ8I/giphy.gif');
         this.channel.send(embed);
     }
 }
