@@ -23,7 +23,13 @@ client.on("ready", () => {
     activity: {
       name: `"${prefix}help" for help`
     }
-  })
+  });
+
+  //Checking if this process whether a child process or parent process.
+  if (process.argv[2] === 'child') {
+    let data = process.argv[3];
+    client.channels.cache.get(`${data}`).send("Restarted!");
+  }
 });
 
 client.once("reconnecting", () => {
@@ -53,25 +59,12 @@ client.on("guildCreate", guild => {
 });
 
 client.on("guildDelete", async guild => {
-  // let channelID;
-  // let channels = guild.channels.cache;
-
-  // channelLoop:
-  // for (let key in channels) {
-  //     let c = channels[key];
-  //     if (c[1].type === "text") {
-  //         channelID = c[0];
-  //         break channelLoop;
-  //     }
-  // }
-  
-  // //let channel = guild.channels.cache.get(guild.systemChannelID || channelID);
-  // const fetchedChannel = await client.channels.fetch(channelID);
-  // let embed = new Embed(Discord, fetchedChannel);
-  // embed.goodbye();
+  let embed = new Embed(Discord, guild.owner.user);
+  embed.goodbye();
   queue.clear();
   console.log("Queue cleared!");
 });
+
 
 client.on("message", async message => {
   if (message.author.bot || !message.content.startsWith(prefix)) return;
@@ -103,11 +96,13 @@ client.on("message", async message => {
     client.commands.get('resume').execute(message, serverQueue);
     return;
   } else if (command === 'restart') {
-    client.commands.get('restart').execute(message, serverQueue, client, token);
+    client.commands.get('restart').execute(message, client);
     return;
   } else if (command === 'song') {
-    client.commands.get('song').execute(Discord, serverQueue.textChannel, message, serverQueue)
+    client.commands.get('song').execute(Discord, message, serverQueue)
     return;
+  } else if (command === 'terminate') {
+    client.commands.get('terminate').execute(message, client);
   } else if (command === 'help') {
     client.commands.get('help').execute(message, prefix, client.commands, Discord);
     return;

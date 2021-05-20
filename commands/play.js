@@ -29,10 +29,10 @@ module.exports = {
 
         dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
-        if(loopCounter == 0) {
-            let embed = new Embed(Discord, serverQueue.textChannel);
-            embed.playEmbed(author, song, dispatcher, serverQueue.songs.length);
-        }
+        //if(loopCounter == 0) {
+        //    let embed = new Embed(Discord, serverQueue.textChannel);
+        //    embed.playEmbed(author, song, dispatcher, serverQueue.songs.length);
+        //}
 
     }
 }

@@ -7,7 +7,7 @@ class Embed {
     playEmbed(author, song, dispatcher, queueLength) {
 
         var embed = new this.Discord.MessageEmbed()
-            .setColor('RANDOM')
+            .setColor('#748cdc')
             .setTitle('Hands in the air!')
             .setAuthor(`${author.username}`, `${author.displayAvatarURL(true)}`)
             .setThumbnail(`${song.channelPicture}`)
