@@ -65,7 +65,6 @@ client.on("guildDelete", async guild => {
   console.log("Queue cleared!");
 });
 
-
 client.on("message", async message => {
   if (message.author.bot || !message.content.startsWith(prefix)) return;
 
@@ -103,6 +102,9 @@ client.on("message", async message => {
     return;
   } else if (command === 'terminate') {
     client.commands.get('terminate').execute(message, client);
+  } else if (command === 'ping') {
+    client.commands.get('ping').execute(message, client, Discord);
+    return;
   } else if (command === 'help') {
     client.commands.get('help').execute(message, prefix, client.commands, Discord);
     return;

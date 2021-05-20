@@ -41,6 +41,14 @@ class Embed {
             //.setImage('https://media.giphy.com/media/blSTtZehjAZ8I/giphy.gif');
         this.channel.send(embed);
     }
+
+    ping(message, client) {
+        const embed = new this.Discord.MessageEmbed()
+            .setColor('RANDOM')
+            .setTitle('Pong!')
+            .setDescription(`⌚Latency is ${Date.now() - message.createdTimestamp}ms. ⌛API latency is ${Math.round(client.ws.ping)}ms`);
+        this.channel.send(embed);
+    }
 }
 
 module.exports = Embed;

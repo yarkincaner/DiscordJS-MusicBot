@@ -1,5 +1,4 @@
 const Embed = require("../embed/embed");
-var loopCounter = 0;
 
 module.exports = {
     name: 'play',
@@ -18,9 +17,6 @@ module.exports = {
 
                 if(!song.loop) {
                     serverQueue.songs.shift();
-                    loopCounter = 0;
-                } else {
-                    loopCounter++;
                 }
 
                 this.execute(author, guild, serverQueue.songs[0], ytdl, queue, Discord);
@@ -28,11 +24,5 @@ module.exports = {
             .on("error", error => console.error(error));
 
         dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-
-        //if(loopCounter == 0) {
-        //    let embed = new Embed(Discord, serverQueue.textChannel);
-        //    embed.playEmbed(author, song, dispatcher, serverQueue.songs.length);
-        //}
-
     }
 }
