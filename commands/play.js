@@ -1,5 +1,3 @@
-const Embed = require("../embed/embed");
-
 module.exports = {
     name: 'play',
     description: "plays the passed youtube link",

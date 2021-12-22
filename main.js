@@ -25,7 +25,7 @@ client.on("ready", () => {
     }
   });
 
-  //Checking if this process whether a child process or parent process.
+  //Checking whether this process is a child process or a parent process.
   if (process.argv[2] === 'child') {
     let data = process.argv[3];
     client.channels.cache.get(`${data}`).send("Restarted!");

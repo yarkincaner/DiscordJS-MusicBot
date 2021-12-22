@@ -14,6 +14,6 @@ module.exports = {
         }
 
         let embed = new Embed(Discord, serverQueue.textChannel);
-        embed.playEmbed(message.author, serverQueue.songs[0], serverQueue.connection, serverQueue.songs.length);
+        embed.playEmbed(message.author, serverQueue.songs[0], serverQueue.connection.dispatcher, serverQueue.songs.length);
     }
 }
